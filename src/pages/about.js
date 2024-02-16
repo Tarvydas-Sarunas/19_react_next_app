@@ -3,10 +3,10 @@ import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export default function Home() {
+export default function About() {
   return (
-    <div className='container'>
-      <h1 className='text-5xl my-4 font-semibold'>Hello next js</h1>
+    <div className='container bg-slate-200 p-10'>
+      <h1 className='text-5xl my-4 font-semibold'>About us</h1>
       <h2></h2>
     </div>
   );
