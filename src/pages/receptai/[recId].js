@@ -4,27 +4,27 @@ import { useRouter } from 'next/router';
 // import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-export default function SingleRecept({ receptas }) {
+export default function SingleRecept({ item }) {
   // const {id} = useParams()
-  const router = useRouter();
-  const receptId = router.query.recId;
-  const singleRecUrl = `https://dummyjson.com/recipes/${receptId}`;
+  // const router = useRouter();
+  // const receptId = router.query.recId;
+  // const singleRecUrl = `https://dummyjson.com/recipes/${receptId}`;
 
-  const [receptObj, setRecepObj] = useState({});
-  console.log('receptObj ===', receptObj);
+  // const [receptObj, setRecepObj] = useState({});
+  // console.log('receptObj ===', receptObj);
 
-  useEffect(() => {
-    axios
-      .get(singleRecUrl)
-      .then((resp) => {
-        const receptoObj = resp.data;
-        setRecepObj(receptoObj);
-        console.log('receptObj ===', receptObj);
-      })
-      .catch((error) => {
-        console.warn('ivyko klaida:', error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(singleRecUrl)
+  //     .then((resp) => {
+  //       const receptoObj = resp.data;
+  //       setRecepObj(receptoObj);
+  //       console.log('receptObj ===', receptObj);
+  //     })
+  //     .catch((error) => {
+  //       console.warn('ivyko klaida:', error);
+  //     });
+  // }, []);
 
   return (
     <>
@@ -35,7 +35,7 @@ export default function SingleRecept({ receptas }) {
         </h1>
       </div>
 
-      <div className='border shadow-md w-2/3 ml-auto mr-auto'>
+      {/* <div className='border shadow-md w-2/3 ml-auto mr-auto'>
         <img
           src={receptObj.image}
           alt={receptObj.name}
@@ -54,6 +54,29 @@ export default function SingleRecept({ receptas }) {
         <ul>
           <p>Instructions:</p>
           {receptObj.instructions?.map((inst) => (
+            <li key={inst}>{inst}</li>
+          ))}
+        </ul>
+      </div> */}
+      <div className='border shadow-md w-2/3 ml-auto mr-auto'>
+        <img
+          src={item.image}
+          alt={item.name}
+          className='block h-56 w-full object-cover'
+        />
+        <h2>{item.name}</h2>
+        <p>Cuisine: {item.cuisine}</p>
+        <p>Difficulty: {item.difficulty}</p>
+        <p>Rating: {item.rating}</p>
+        <ul>
+          <p>Ingredients:</p>
+          {item.ingredients?.map((ingr) => (
+            <li key={ingr}>{ingr}</li>
+          ))}
+        </ul>
+        <ul>
+          <p>Instructions:</p>
+          {item.instructions?.map((inst) => (
             <li key={inst}>{inst}</li>
           ))}
         </ul>
@@ -94,26 +117,28 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps() {
+export async function getStaticProps(context) {
   // Call an external API endpoint to get posts
+  const recId = context.params.recId;
+
   function getData() {
-    return fetch(rUrl)
+    return fetch(`${rUrl}/${recId}`)
       .then((resp) => resp.json())
-      .then((atsObj) => {
-        return atsObj.recipes;
+      .then((singleRespObj) => {
+        return singleRespObj;
       })
       .catch((error) => {
         console.warn('ivyko klaida:', error);
       });
   }
 
-  const receptas = await getData();
+  const curentObj = await getData();
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
-      receptas,
+      item: curentObj,
     },
   };
 }
