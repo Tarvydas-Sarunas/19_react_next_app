@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import axios from 'axios';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 // import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -59,11 +60,18 @@ export default function SingleRecept({ item }) {
         </ul>
       </div> */}
       <div className='border shadow-md w-2/3 ml-auto mr-auto'>
-        <img
+        <Image
+          src={item.image}
+          alt={item.name}
+          width={500}
+          height={500}
+          className='block h-56 w-full object-cover'
+        />
+        {/* <img
           src={item.image}
           alt={item.name}
           className='block h-56 w-full object-cover'
-        />
+        /> */}
         <h2>{item.name}</h2>
         <p>Cuisine: {item.cuisine}</p>
         <p>Difficulty: {item.difficulty}</p>
