@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { list } from 'postcss';
 import React from 'react';
 
@@ -5,7 +7,7 @@ export default function OneReceptcard({ item }) {
   return (
     <li className='border shadow-md'>
       <img
-        src={item.images}
+        src={item.image}
         alt={item.name}
         className='block h-56 w-full object-cover'
       />
@@ -13,7 +15,7 @@ export default function OneReceptcard({ item }) {
       <p>Cuisine: {item.cuisine}</p>
       <p>Difficulty: {item.difficulty}</p>
       <p>Rating: {item.rating}</p>
-      <ul>
+      {/* <ul>
         <p>Ingredients</p>
         {item.ingredients.map((ingr) => (
           <li key={ingr}>{ingr}</li>
@@ -24,7 +26,8 @@ export default function OneReceptcard({ item }) {
         {item.instructions.map((inst) => (
           <li key={inst}>{inst}</li>
         ))}
-      </ul>
+      </ul> */}
+      <Link href={`/receptai/${item.id}`}>Read More</Link>
     </li>
   );
 }
