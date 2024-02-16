@@ -62,27 +62,58 @@ export default function SingleRecept({ receptas }) {
   );
 }
 
-// export async function getStaticProps() {
-//   // Call an external API endpoint to get posts
-//   function getData() {
-//     return fetch(singleRecUrl)
-//       .then((resp) => resp.json())
-//       .then((atsObj) => {
-//         console.log('atsObj ===', atsObj);
-//         return atsObj.recipes;
-//       })
-//       .catch((error) => {
-//         console.warn('ivyko klaida:', error);
-//       });
-//   }
+const rUrl = 'https://dummyjson.com/recipes';
 
-//   const receptas = await getData();
+export async function getStaticPaths() {
+  function getData() {
+    return fetch(rUrl)
+      .then((resp) => resp.json())
+      .then((atsObj) => {
+        console.log('atsObj ===', atsObj);
+        return atsObj.recipes;
+      })
+      .catch((error) => {
+        console.warn('ivyko klaida:', error);
+      });
+  }
 
-//   // By returning { props: { posts } }, the Blog component
-//   // will receive `posts` as a prop at build time
-//   return {
-//     props: {
-//       receptas,
-//     },
-//   };
-// }
+  const allData = await getData();
+
+  const paths = allData.map((rObj) => {
+    return {
+      params: {
+        recId: rObj.id.toString(),
+      },
+    };
+  });
+  console.log('paths ===', paths);
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps() {
+  // Call an external API endpoint to get posts
+  function getData() {
+    return fetch(rUrl)
+      .then((resp) => resp.json())
+      .then((atsObj) => {
+        return atsObj.recipes;
+      })
+      .catch((error) => {
+        console.warn('ivyko klaida:', error);
+      });
+  }
+
+  const receptas = await getData();
+
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      receptas,
+    },
+  };
+}
